@@ -1,5 +1,5 @@
 # Model Router Evaluation (Nov 2025)
-
+![Balanced profile results](img/chart_Balanced.png)
 Model router for Microsoft Foundry reached general availability with the 2025-11-18 release, adding routing profiles (Balanced, Cost, Quality) and support for custom model subsets so AI engineers can optimize on cost and latency without deploying every base model.
 
 ![Model Router routing profile selector](img/model-router-routing-mode.png)
