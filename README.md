@@ -44,7 +44,7 @@ python run_batch.py
 
 # Results
 
-Each histogram shows the distribution of underlying models selected by Model Router for the 1,000 prompts per profile.
+Each bar chart shows the distribution of underlying models selected by Model Router for the 1,000 prompts per profile.
 ## "Balanced" profile
 ![Balanced profile results](img/chart_Balanced.png)
 
