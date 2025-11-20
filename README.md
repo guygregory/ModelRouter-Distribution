@@ -45,7 +45,7 @@ python run_batch.py
 # Results
 
 Each histogram shows the distribution of underlying models selected by Model Router for the 1,000 prompts per profile.
-## Balanced profile
+## "Balanced" profile
 ![Balanced profile results](img/chart_Balanced.png)
 
 | Model | Count | Share |
@@ -63,7 +63,7 @@ Each histogram shows the distribution of underlying models selected by Model Rou
 Balanced routing primarily relied on `gpt-5-nano` and `gpt-5-mini`, with occasional escalation to larger or specialty models for more demanding prompts.
 
 
-# Cost profile (version 2025-11-18)
+## "Cost" profile
 
 ![Cost profile results](img/chart_Cost.png)
 
@@ -80,7 +80,7 @@ Balanced routing primarily relied on `gpt-5-nano` and `gpt-5-mini`, with occasio
 
 The cost-focused profile strongly favors the nano variants of gpt-4.1 and gpt-5, only escalating when the heuristic deems it necessary.
 
-# Quality profile (version 2025-11-18)
+## "Quality" profile
 
 ![Quality profile results](img/chart_Quality.png)
 
