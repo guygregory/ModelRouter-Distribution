@@ -1,0 +1,8 @@
+datasets
+httpx
+matplotlib
+openai
+openpyxl
+pandas
+python-dotenv
+tqdm
