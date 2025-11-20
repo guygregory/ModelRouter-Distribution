@@ -106,6 +106,9 @@ The quality profile allocates roughly half of the workload to full `gpt-5`, with
 - Routing decisions are **nondeterministic**. Replaying the same prompt may yield a different underlying model, especially when multiple candidates score similarly.
 - Anthropic Claude models are now supported in Model Router 2025-11-18, but they appear only if you deploy them to your Foundry resource and explicitly include them in the model subset. They were not enabled for this experiment, so no Claude traffic is recorded here.
 - Pricing: Model Router charges for input tokens routed through the service (currently USD $0.15 per million input tokens) **plus** the consumption of the selected underlying models. Monitor both components in Cost Analysis.
+- The total cost for this run of 3,000 prompts was approx $10. The vast majority was the gpt-5 reasoning output tokens for the "Quality" profile, which cost more than all of the other tokens combined.
+
+![Estimated Costs](img/estimatedCosts.png)
 
 ## References
 
