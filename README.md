@@ -1,14 +1,16 @@
-# Microsoft Foundry Model Router Evaluation (November 2025)
+# Model Router Evaluation (Nov 2025)
 
-Model Router for Microsoft Foundry reached general availability with the 2025-11-18 release, adding routing profiles (Balanced, Cost, Quality) and support for custom model subsets so engineers can fine-tune cost, latency, and compliance envelopes without redeploying every base model. The screenshots below highlight the routing profile selector and the model subset configuration now available directly in the Foundry portal.
-
+Model router for Microsoft Foundry reached general availability with the 2025-11-18 release, adding routing profiles (Balanced, Cost, Quality) and support for custom model subsets so AI engineers can optimize on cost and latency without deploying every base model.
 ![Model Router routing profile selector](img/model-router-routing-mode.png)
+
+Model router supports custom subsets: you can specify which underlying models to include in routing decisions. This gives you more control over cost, compliance, and performance characteristics.
+
 ![Model Router model subset selector](img/model-router-model-subset.png)
 
 ## Experiment Overview
 
 - **Objective**: Observe how GA Model Router (version 2025-11-18) selects underlying models across the Balanced, Cost, and Quality routing profiles.
-- **Date**: November 2025 test campaign.
+- **Date**: November 2025
 - **Dataset**: First 1,000 prompts from the [data-is-better-together/10k_prompts_ranked](https://huggingface.co/datasets/data-is-better-together/10k_prompts_ranked) Hugging Face dataset.
 - **Runs**: Three independent passes (one per preset profile) against the same prompt set.
 - **Outputs captured**: Underlying model identifier, chosen profile, and full model response for each prompt.
@@ -23,7 +25,7 @@ Model Router for Microsoft Foundry reached general availability with the 2025-11
 3. **Batch execution**
    - For each profile, configure the Model Router deployment accordingly within Foundry, then invoke the script to stream the cached prompts.
    - The script stops after 1,000 successful writes (`OUTPUT_LIMIT`) and appends each result to the profile-specific JSONL file (`results_Balanced.jsonl`, `results_Cost.jsonl`, `results_Quality.jsonl`).
-   - Failures (timeouts or API errors) are logged and skipped; no retries were attempted in this campaign.
+   - Failures (timeouts or API errors) are logged and skipped; no retries were attempted in this test.
 4. **Post-processing**
    - Responses were aggregated to count how many prompts each underlying model served per profile.
    - The counts drive both the charts and the summary tables below.
@@ -39,15 +41,11 @@ pip install -r requirements.txt  # datasets, httpx, python-dotenv, tqdm, openai
 python run_batch.py
 ```
 
-## Results
+# Results
 
 Each histogram shows the distribution of underlying models selected by Model Router for the 1,000 prompts per profile.
-
+## Balanced profile
 ![Balanced profile results](img/chart_Balanced.png)
-![Cost profile results](img/chart_Cost.png)
-![Quality profile results](img/chart_Quality.png)
-
-### Balanced profile (version 2025-11-18)
 
 | Model | Count | Share |
 | --- | --- | --- |
@@ -61,9 +59,12 @@ Each histogram shows the distribution of underlying models selected by Model Rou
 | gpt-4o-mini-2024-07-18 | 14 | 1.4% |
 | *Others* | 21 | 2.1% |
 
-Balanced routing primarily relied on `gpt-5-nano` and `gpt-5-mini`, with occasional escalation to larger or specialty models (e.g., `gpt-oss-120b`, `grok-4-fast-reasoning`) for more demanding prompts.
+Balanced routing primarily relied on `gpt-5-nano` and `gpt-5-mini`, with occasional escalation to larger or specialty models for more demanding prompts.
 
-### Cost profile (version 2025-11-18)
+
+# Cost profile (version 2025-11-18)
+
+![Cost profile results](img/chart_Cost.png)
 
 | Model | Count | Share |
 | --- | --- | --- |
@@ -76,9 +77,11 @@ Balanced routing primarily relied on `gpt-5-nano` and `gpt-5-mini`, with occasio
 | gpt-5-chat-2025-08-07 | 2 | 0.2% |
 | DeepSeek-V3.1 | 1 | 0.1% |
 
-The cost-focused profile strongly favors the smallest GPT-5 variants, only escalating when the heuristic deems it necessary.
+The cost-focused profile strongly favors the nano variants of gpt-4.1 and gpt-5, only escalating when the heuristic deems it necessary.
 
-### Quality profile (version 2025-11-18)
+# Quality profile (version 2025-11-18)
+
+![Quality profile results](img/chart_Quality.png)
 
 | Model | Count | Share |
 | --- | --- | --- |
@@ -94,7 +97,7 @@ The cost-focused profile strongly favors the smallest GPT-5 variants, only escal
 | gpt-4o-2024-11-20 | 6 | 0.6% |
 | *Others* | 12 | 1.2% |
 
-The quality profile allocates roughly half of the workload to full `gpt-5`, with a mix of reasoning (`o4-mini`, `grok-4`) and high-capacity open models when higher fidelity is required.
+The quality profile allocates roughly half of the workload to full `gpt-5`, with a mix of reasoning and high-capability open models when higher fidelity is required.
 
 ## Caveats and Recommendations
 
@@ -103,14 +106,8 @@ The quality profile allocates roughly half of the workload to full `gpt-5`, with
 - Anthropic Claude models are now supported in Model Router 2025-11-18, but they appear only if you deploy them to your Foundry resource and explicitly include them in the model subset. They were not enabled for this experiment, so no Claude traffic is recorded here.
 - Pricing: Model Router charges for input tokens routed through the service (currently USD $0.15 per million input tokens) **plus** the consumption of the selected underlying models. Monitor both components in Cost Analysis.
 
-## Next Steps
-
-1. Enable custom subsets to constrain routing to the models you have validated for compliance or latency.
-2. Extend the benchmark with domain-specific prompt sets or longer multi-turn conversations to stress reasoning model selection.
-3. Track per-model latencies and token usage to complement the routing frequency data presented here.
-
 ## References
 
 - [Model router concepts](https://learn.microsoft.com/azure/ai-foundry/openai/concepts/model-router?view=foundry)
-- data-is-better-together/10k_prompts_ranked dataset
+- [data-is-better-together/10k_prompts_ranked dataset](https://huggingface.co/datasets/data-is-better-together/10k_prompts_ranked)
 - [Ignite 2025 session BRK195](https://ignite.microsoft.com/en-US/sessions/BRK195)
