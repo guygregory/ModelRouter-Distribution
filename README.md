@@ -1,5 +1,5 @@
 # Model Router Evaluation (Nov 2025)
-![Balanced profile results](img/chart_Balanced.png)
+![Balanced profile results](img/chart_Balanced_2025-11-18.png)
 Model router for Microsoft Foundry reached general availability with the 2025-11-18 release, adding routing profiles (Balanced, Cost, Quality) and support for custom model subsets so AI engineers can optimize on cost and latency without deploying every base model.
 
 ![Model Router routing profile selector](img/model-router-routing-mode.png)
@@ -46,7 +46,7 @@ python run_batch.py
 
 Each histogram shows the distribution of underlying models selected by Model Router for the 1,000 prompts per profile.
 ## "Balanced" profile
-![Balanced profile results](img/chart_Balanced.png)
+![Balanced profile results](img/chart_Balanced_2025-11-18.png)
 
 | Model | Count | Share |
 | --- | --- | --- |
@@ -65,7 +65,7 @@ Balanced routing primarily relied on `gpt-5-nano` and `gpt-5-mini`, with occasio
 
 ## "Cost" profile
 
-![Cost profile results](img/chart_Cost.png)
+![Cost profile results](img/chart_Cost_2025-11-18.png)
 
 | Model | Count | Share |
 | --- | --- | --- |
@@ -82,7 +82,7 @@ The cost-focused profile strongly favors the nano variants of gpt-4.1 and gpt-5,
 
 ## "Quality" profile
 
-![Quality profile results](img/chart_Quality.png)
+![Quality profile results](img/chart_Quality_2025-11-18.png)
 
 | Model | Count | Share |
 | --- | --- | --- |
@@ -108,7 +108,7 @@ The quality profile allocates roughly half of the workload to full `gpt-5`, with
 - Pricing: Model Router charges for input tokens routed through the service (currently USD $0.15 per million input tokens) **plus** the consumption of the selected underlying models. Monitor both components in Cost Analysis.
 - The total cost for this run of 3,000 prompts was approx $10. The vast majority was the gpt-5 reasoning output tokens for the "Quality" profile, which cost more than all of the other tokens combined.
 
-![Estimated Costs](img/estimatedCosts.png)
+![Estimated Costs](img/estimatedCosts_2025-11-18.png)
 
 ## References
 

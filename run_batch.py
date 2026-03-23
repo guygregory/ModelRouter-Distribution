@@ -8,7 +8,7 @@ import httpx
 from datasets import load_dataset
 from dotenv import load_dotenv
 from httpx import TimeoutException
-from openai import APITimeoutError, AzureOpenAI
+from openai import APITimeoutError, OpenAI
 from tqdm import tqdm
 
 
@@ -28,16 +28,11 @@ def load_environment() -> None:
     load_dotenv()
 
 
-def create_client() -> AzureOpenAI:
-    endpoint = os.environ["AZURE_OPENAI_API_ENDPOINT"]
-    deployment = os.environ["AZURE_OPENAI_API_MODEL"]
-    subscription_key = os.environ["AZURE_OPENAI_API_KEY"]
-    api_version = os.environ["AZURE_OPENAI_API_VERSION"]
+def create_client() -> OpenAI:
     http_client = httpx.Client(timeout=httpx.Timeout(REQUEST_TIMEOUT_SECONDS))
-    return AzureOpenAI(
-        api_version=api_version,
-        azure_endpoint=endpoint,
-        api_key=subscription_key,
+    return OpenAI(
+        api_key=os.environ["AZURE_OPENAI_API_KEY"],
+        base_url=os.environ["AZURE_OPENAI_API_V1_ENDPOINT"],
         http_client=http_client,
         max_retries=0,
     )
@@ -122,11 +117,7 @@ def process_prompts(prompts: List[str]) -> None:
                                 {"role": "system", "content": "You are a helpful assistant."},
                                 {"role": "user", "content": prompt},
                             ],
-                            max_tokens=8192,
-                            temperature=0.7,
-                            top_p=0.95,
-                            frequency_penalty=0.0,
-                            presence_penalty=0.0,
+                            max_completion_tokens=8192,
                             model=deployment_name,
                         )
                     except (APITimeoutError, TimeoutException):

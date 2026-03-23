@@ -1,2 +1,4 @@
 .env
 ignore/
+prompts_cache.jsonl
+results_Balanced.jsonl
